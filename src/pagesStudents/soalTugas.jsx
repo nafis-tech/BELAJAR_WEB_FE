@@ -15,7 +15,7 @@ class SoalTugas extends React.Component {
             nilaiAkhir: null,
             totalScore: null,
             page: 1,
-            disabled: false,
+            disabled: true,
             nilaiTugas: null,
             materi: '',
             student :'',
@@ -44,21 +44,6 @@ class SoalTugas extends React.Component {
 
     }
 
-    //getallsoal.lenght
-    allSoalTugas = () => {
-        console.log()
-            Axios.get(`http://localhost:2000/admin/all-soaltugas`)
-                .then(res => {
-                    console.log(res.data)
-                    this.setState({ allSoal : res.data })
-                    console.log(this.state.allSoal.length)
-                })
-                .catch(err => {
-                    console.log(err + 'Eror data All tugas soal biologi')
-                })
-
-    }
-
     getSoal = () => {
         Axios.post(`http://localhost:2000/admin/soal-tugas`, { page: 1 })
             .then(res => {
@@ -73,7 +58,6 @@ class SoalTugas extends React.Component {
             })
     }
     componentDidMount() {
-        this.allSoalTugas()
         this.getSoal()
         this.studentByid()
         // this.jawabanValid()
@@ -107,6 +91,7 @@ class SoalTugas extends React.Component {
 
     onSave = () => {
         this.setState({ nilaiAkhir: this.state.nilaiAkhir + this.state.totalScore })
+        this.setState({disabled : false})
         alert('Are you sure you have completed the Exam? If YES, click SUBMIT')
     }
 
@@ -133,9 +118,8 @@ class SoalTugas extends React.Component {
             .catch(err => {
                 console.log(err + 'Eror nilai Tugas')
             })
-
-        console.log(this.state.totalScore)
-        console.log(this.state.nilaiAkhir) //berhasil nilai terakhir kecantum ketika save
+        // console.log(this.state.totalScore)
+        // console.log(this.state.nilaiAkhir) //berhasil nilai terakhir kecantum ketika save
     }
 
     render() {
@@ -145,16 +129,16 @@ class SoalTugas extends React.Component {
                     <h3>Soal Tugas, Materi : {this.state.materi}</h3>
                     <h6>Date : {new Date().getDate()}/{new Date().getMonth() + 1}/{new Date().getFullYear()}</h6>
                     <h6>Time : {new Date().getHours()}:{new Date().getMinutes()}:{new Date().getSeconds()}</h6>
+                    <h6>Note : Click Save before you Submit</h6>
                     <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5vw', marginBottom: '2vh' }}>
                         <Button variant="outline-secondary" disabled={this.state.page === 1 ? true : false} onClick={this.onPrev}>Prev</Button>
-                        <Button variant="outline-info" disabled={this.state.page === this.state.allSoal.length ? true : false} onClick={this.onNext}>Next</Button>
-                        <h6>Soal ke {this.state.page} dari {this.state.allSoal.length}</h6>
-                        <Button variant="warning" onClick={this.onSave} >SAVE</Button>
-                        <Button variant="success" onClick={this.jawabanValid} as={Link} to={`/profile-students`} >Submit</Button>
+                        <Button variant="outline-info" disabled={this.state.page === this.state.maxPage ? true : false} onClick={this.onNext}>Next</Button>
+                        <h6>Soal ke {this.state.page} dari {this.state.maxPage}</h6>
+                        <Button variant="warning" style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12)'}} onClick={this.onSave} >SAVE</Button>
+                        <Button variant="success" disabled={this.state.disabled} onClick={this.jawabanValid} as={Link} to={`/profile-students`} >Submit</Button>
                     </div>
                 </div>
                 {this.state.soalTugas.map(item => {
-                    // console.log(item.jawaban_tugas)
                     return (
                         <div style={{ marginLeft: '5vw', width: '80vw' }}>
                             <p><strong>{item.no_soal_tugas}.</strong> {item.soal}</p>

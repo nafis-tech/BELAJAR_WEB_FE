@@ -5,6 +5,7 @@ import SoalUjian from './pagesStudents/soalUjian';
 import ProfileStudents from './pagesStudents/profileStudents';
 import SoalTugas from './pagesStudents/soalTugas';
 import RekapNilai from './pagesAdmin/rekap_nilai';
+import Materi from './pagesStudents/linkMateri';
 
 class App extends React.Component {
 
@@ -12,10 +13,11 @@ class App extends React.Component {
     return (
       <Switch>
         <Route path="/" component={Home} exact />
-        <Route path="/profile-students" component={ProfileStudents} exact />
-        <Route path="/soal-tugas" component={SoalTugas} exact />
-        <Route path="/soal-ujian" component={SoalUjian} exact />
-        <Route path="/rekap-nilai" component={RekapNilai} exact />
+        <Route path="/profile-students" component={ProfileStudents}/>
+        <Route path="/soal-tugas" component={SoalTugas}  />
+        <Route path="/soal-ujian" component={SoalUjian} />
+        <Route path="/rekap-nilai" component={RekapNilai} />
+        <Route path="/materi" component={Materi} />
       </Switch>
     )
   }
