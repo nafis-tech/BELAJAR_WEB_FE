@@ -3,6 +3,7 @@ import Axios from 'axios'
 import {
     Button,
 } from 'react-bootstrap'
+import { IMG_3, IMG_5, IMG_14 } from '../assets'
 import { Link } from 'react-router-dom'
 
 class SoalUjian extends React.Component {
@@ -18,9 +19,9 @@ class SoalUjian extends React.Component {
             disabled: true,
             nilaiTugas: null,
             materi: '',
-            student :'',
-            allSoal:[],
-            save : false
+            student: '',
+            allSoal: [],
+            save: false
         }
 
 
@@ -29,38 +30,23 @@ class SoalUjian extends React.Component {
     // getStudentsById
     studentByid = (fullname) => {
         let name = {
-            fullname :'yoona shi'
+            fullname: 'yoona shi'
         }
         console.log(name)
-            Axios.post(`http://localhost:2000/admin/student-fullname`, name)
-                .then(res => {
-                    console.log(res.data)
-                    this.setState({ student : res.data })
-                    console.log(this.state.student.kelas)
-                })
-                .catch(err => {
-                    console.log(err + 'Eror data student by id')
-                })
-
-    }
-
-    //getallsoal.lenght
-    allSoalTugas = () => {
-        console.log()
-            Axios.get(`http://localhost:2000/admin/all-soaltugas`)
-                .then(res => {
-                    console.log(res.data)
-                    this.setState({ allSoal : res.data })
-                    console.log(this.state.allSoal.length)
-                })
-                .catch(err => {
-                    console.log(err + 'Eror data All tugas soal biologi')
-                })
+        Axios.post(`http://localhost:2000/admin/student-fullname`, name)
+            .then(res => {
+                console.log(res.data)
+                this.setState({ student: res.data })
+                console.log(this.state.student.kelas)
+            })
+            .catch(err => {
+                console.log(err + 'Eror data student by id')
+            })
 
     }
 
     getSoal = () => {
-        Axios.post(`http://localhost:2000/admin/soal-tugas`, { page: 1 })
+        Axios.post(`http://localhost:2000/admin/soal-ujian`, { page: 1 })
             .then(res => {
                 console.log(res.data)
                 this.setState({ soalTugas: res.data.slice(0, res.data.length - 1), maxPage: res.data[res.data.length - 1] })
@@ -69,23 +55,22 @@ class SoalUjian extends React.Component {
                 console.log(this.state.jawabanSiswa)
             })
             .catch(err => {
-                console.log(err + 'Eror get soal tugas')
+                console.log(err + 'Eror get soal ujian')
             })
     }
     componentDidMount() {
-        this.allSoalTugas()
         this.getSoal()
         this.studentByid()
         // this.jawabanValid()
     }
 
     onNext = () => {
-        Axios.post(`http://localhost:2000/admin/soal-tugas`, { page: this.state.page + 1 })
+        Axios.post(`http://localhost:2000/admin/soal-ujian`, { page: this.state.page + 1 })
             .then(res => {
                 console.log(res.data)
                 this.setState({ soalTugas: res.data.slice(0, res.data.length - 1), maxPage: res.data[res.data.length - 1], page: this.state.page + 1 })
                 this.setState({ nilaiAkhir: this.state.nilaiAkhir + this.state.totalScore })
-                this.setState({totalScore : 0})
+                this.setState({ totalScore: 0 })
                 console.log(this.state.totalScore)
                 console.log(this.state.nilaiAkhir)
                 console.log(this.state.jawabanSiswa)
@@ -95,19 +80,19 @@ class SoalUjian extends React.Component {
             })
     }
     onPrev = () => {
-        Axios.post(`http://localhost:2000/admin/soal-tugas`, { page: this.state.page - 1 })
+        Axios.post(`http://localhost:2000/admin/soal-ujian`, { page: this.state.page - 1 })
             .then(res => {
                 console.log(res.data)
                 this.setState({ soalTugas: res.data.slice(0, res.data.length - 1), maxPage: res.data[res.data.length - 1], page: this.state.page - 1 })
             })
             .catch(err => {
-                console.log(err + 'Eror nextpage')
+                console.log(err + 'Eror prev page')
             })
     }
 
     onSave = () => {
         this.setState({ nilaiAkhir: this.state.nilaiAkhir + this.state.totalScore })
-        this.setState({disabled : false})
+        this.setState({ disabled: false })
         alert('Are you sure you have completed the Exam? If YES, click SUBMIT')
     }
 
@@ -115,24 +100,25 @@ class SoalUjian extends React.Component {
     jawabanValid = () => {
         let newData = {
             fullname: `${this.state.student.fullname}`,
-            kelas: `${this.state.student.kelas}`,
+            kelas: `${this.state.student.kelas}`, 
             materi: `${this.state.materi}`,
-            nilai_tugas: this.state.nilaiAkhir,
+            nilai_ujian: this.state.nilaiAkhir,
+            nama_ujian: `${this.state.soalTugas[0].nama_ujian}`,
             id_students: `${this.state.student.id_students}`,
             date: `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`,
             time: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
 
         }
         console.log(newData)
-        Axios.post(`http://localhost:2000/admin/nilai-tugas`, newData)
+        Axios.post(`http://localhost:2000/admin/nilai-ujian`, newData)
             .then(res => {
                 console.log(res.data)
                 this.setState({ nilaiAkhir: this.state.nilaiAkhir + this.state.totalScore })
                 this.setState({ nilaiTugas: res.data })
-                
+
             })
             .catch(err => {
-                console.log(err + 'Eror nilai Tugas')
+                console.log(err + 'Eror nilai Ujian')
             })
         // console.log(this.state.totalScore)
         // console.log(this.state.nilaiAkhir) //berhasil nilai terakhir kecantum ketika save
@@ -140,45 +126,47 @@ class SoalUjian extends React.Component {
 
     render() {
         return (
-            <div>
-                <div style={{ marginLeft: '5vw', marginBottom: '5vh' }}>
-                    <h3>Soal Tugas, Materi : {this.state.materi}</h3>
-                    <h6>Date : {new Date().getDate()}/{new Date().getMonth() + 1}/{new Date().getFullYear()}</h6>
-                    <h6>Time : {new Date().getHours()}:{new Date().getMinutes()}:{new Date().getSeconds()}</h6>
-                    <h6>Note : Click Save before you Submit</h6>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5vw', marginBottom: '2vh' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', background: `url(${IMG_5.default})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', paddingBottom: '5vh' }}>
+                <div style={{ padding: '5vh 5vw 2vh 7vw', }}>
+                   <div style={{ textAlign: 'right', marginRight: '10vw' }}>
+                        <h3>Soal Ujian, Materi : {this.state.materi}</h3>
+                        <h6>Date : {new Date().toLocaleString()}</h6>
+                        <h6>Note : Click<span style={{ color: '#FF9300', background: 'white', borderRadius: '3px' }}>  SAVE  </span> before you <span style={{ color: 'green' }}>Submit</span></h6>
+                    </div>
+                    <h2 style={{ color: 'white', marginLeft: '3vw', background:'#FF6B6B', width:'30vw', borderRadius:'0px 35px', textAlign:'center'}}>Good Luck, {this.state.student.username}</h2>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5vw', marginBottom: '2vh', marginTop: '7vh' }}>
                         <Button variant="outline-secondary" disabled={this.state.page === 1 ? true : false} onClick={this.onPrev}>Prev</Button>
-                        <Button variant="outline-info" disabled={this.state.page === this.state.allSoal.length ? true : false} onClick={this.onNext}>Next</Button>
-                        <h6>Soal ke {this.state.page} dari {this.state.allSoal.length}</h6>
-                        <Button variant="warning" style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12)'}} onClick={this.onSave} >SAVE</Button>
+                        <Button variant="outline-info" disabled={this.state.page === this.state.maxPage ? true : false} onClick={this.onNext}>Next</Button>
+                        <h6 style={{ marginTop: '2vh' }}>Soal ke {this.state.page} dari {this.state.maxPage}</h6>
+                        <Button variant="warning" style={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12)' }} onClick={this.onSave} >SAVE</Button>
                         <Button variant="success" disabled={this.state.disabled} onClick={this.jawabanValid} as={Link} to={`/profile-students`} >Submit</Button>
                     </div>
                 </div>
                 {this.state.soalTugas.map(item => {
                     return (
-                        <div style={{ marginLeft: '5vw', width: '80vw' }}>
-                            <p><strong>{item.no_soal_tugas}.</strong> {item.soal}</p>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '40vw', margin: '2vh' }}>
+                        <div style={{ marginLeft: '10vw', width: '80vw', padding: '3vw', borderRadius: '10px', backgroundColor: 'rgba(255, 255, 255, .9)', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12)' }}>
+                            <p><strong>{item.no_soal_ujian}.</strong> {item.soal_ujian}</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', width: '40vw', margin: '2vh', }}>
                                 <Button style={styles.btn}
                                     value={item.jawaban_a}
                                     type="radio"
-                                    onClick={() => item.jawaban_a === item.jawaban_tugas ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_a })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_a })}`]}
+                                    onClick={() => item.jawaban_a === item.jawaban_ujian ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_a })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_a })}`]}
                                     variant={this.state.jawabanSiswa === item.jawaban_a ? 'warning' : 'outline-warning'} > <strong>A.</strong> {item.jawaban_a}</Button>
                                 <Button style={styles.btn}
                                     type="radio"
-                                    onClick={() => item.jawaban_b === item.jawaban_tugas ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_b })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_b })}`]}
+                                    onClick={() => item.jawaban_b === item.jawaban_ujian ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_b })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_b })}`]}
                                     variant={this.state.jawabanSiswa === item.jawaban_b ? 'warning' : 'outline-warning'} ><strong>B.</strong> {item.jawaban_b}</Button>
                                 <Button style={styles.btn}
                                     type="radio"
-                                    onClick={() => item.jawaban_c === item.jawaban_tugas ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_c })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_c })}`]}
+                                    onClick={() => item.jawaban_c === item.jawaban_ujian ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_c })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_c })}`]}
                                     variant={this.state.jawabanSiswa === item.jawaban_c ? 'warning' : 'outline-warning'} ><strong>C.</strong> {item.jawaban_c}</Button>
                                 <Button style={styles.btn}
                                     type="radio"
-                                    onClick={() => item.jawaban_d === item.jawaban_tugas ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_d })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_d })}`]}
+                                    onClick={() => item.jawaban_d === item.jawaban_ujian ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_d })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_d })}`]}
                                     variant={this.state.jawabanSiswa === item.jawaban_d ? 'warning' : 'outline-warning'} ><strong>D.</strong> {item.jawaban_d}</Button>
                                 <Button style={styles.btn}
                                     type="radio"
-                                    onClick={() => item.jawaban_e === item.jawaban_tugas ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_e })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_e })}`]}
+                                    onClick={() => item.jawaban_e === item.jawaban_ujian ? [`${this.setState({ totalScore: + 10 })} ${this.setState({ jawabanSiswa: item.jawaban_e })}`] : [`${this.setState({ totalScore: 0 })} ${this.setState({ jawabanSiswa: item.jawaban_e })}`]}
                                     variant={this.state.jawabanSiswa === item.jawaban_e ? 'warning' : 'outline-warning'} ><strong>E.</strong> {item.jawaban_e}</Button>
                             </div>
                         </div>
@@ -195,9 +183,18 @@ const styles = {
         margin: '1vh',
         color: 'black',
         border: '1px solid #FF9300',
+        // border: '1px solid #161E54',
         textAlign: 'left',
+        marginLeft: '2vw'
 
     },
 }
+
+//NOTE:
+
+{/* <h6>Date : {new Date().toLocaleDateString()}</h6> */ }
+{/* <h6>Date : {new Date().getDate()} /{new Date().getMonth() + 1} /{new Date().getFullYear()}</h6> */ }
+{/* <h6>Time : {new Date().getHours()}:{new Date().getMinutes()}:{new Date().getSeconds()}</h6> */ }
+
 
 export default SoalUjian;
