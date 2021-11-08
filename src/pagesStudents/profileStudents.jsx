@@ -36,7 +36,7 @@ class ProfileStudents extends React.Component {
 
     profileByid = (fullname) => {
         let name = {
-            fullname: 'yoona shi'
+            fullname: 'Amelia Sindi Wijaya'
         }
         console.log(name)
         Axios.post(`http://localhost:2000/student/profile-students`, name)
@@ -55,7 +55,7 @@ class ProfileStudents extends React.Component {
 
     nilaiByid = (fullname) => {
         let name = {
-            fullname: 'yoona shi',
+            fullname: 'Amelia Sindi Wijaya',
             page: 1
         }
         console.log(name)
@@ -76,7 +76,7 @@ class ProfileStudents extends React.Component {
     onNext = () => {
         if (this.state.next === 'tugas') {
             let name = {
-                fullname: 'yoona shi',
+                fullname: 'Amelia Sindi Wijaya',
                 page: this.state.page + 1
             }
             console.log(name)
@@ -90,7 +90,7 @@ class ProfileStudents extends React.Component {
                 })
         } else if (this.state.next === 'ujian') {
             let name = {
-                fullname: 'yoona shi',
+                fullname: 'Amelia Sindi Wijaya',
                 page: this.state.page + 1
             }
             console.log(name)
@@ -108,7 +108,7 @@ class ProfileStudents extends React.Component {
     onPrev = () => {
         if (this.state.prev === 'tugas') {
             let name = {
-                fullname: 'yoona shi',
+                fullname: 'Amelia Sindi Wijaya',
                 page: this.state.page - 1
             }
             console.log(name)
@@ -122,7 +122,7 @@ class ProfileStudents extends React.Component {
                 })
         } else if (this.state.prev === 'ujian') {
             let name = {
-                fullname: 'yoona shi',
+                fullname: 'Amelia Sindi Wijaya',
                 page: this.state.page - 1
             }
             console.log(name)
@@ -139,7 +139,7 @@ class ProfileStudents extends React.Component {
 
     nilaiUjianByid = (fullname) => {
         let name = {
-            fullname: 'yoona shi',
+            fullname: 'Amelia Sindi Wijaya',
             page: 1
         }
         console.log(name)
@@ -492,7 +492,6 @@ class ProfileStudents extends React.Component {
                     <Card style={{ width: '20rem', marginLeft: '8vw', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <Card.Img variant="top" src="https://media.istockphoto.com/photos/email-message-inbox-notification-on-laptop-screen-business-background-picture-id1229883762?b=1&k=20&m=1229883762&s=170667a&w=0&h=28x3ibf2iGnsC-07X_CIqKkrIIel4uuicWAzmQlN09Y=" />
                         <Card.Body >
-                            <Card.Title>Siswa Page</Card.Title>
                             <Card.Text style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', }}>
                                 <Button style={styles.btn} variant="warning" as={Link} to="/materi">Link Materi</Button>
                                 <Button style={styles.btn} variant="warning" as={Link} to="/soal-tugas">Soal Tugas</Button>
@@ -500,7 +499,7 @@ class ProfileStudents extends React.Component {
                             </Card.Text>
                         </Card.Body>
                     </Card>
-                    <div style={{ marginTop: '3vh' }}>
+                    <div style={{ marginTop: '3vh', marginLeft:'1vw' }}>
                         <Button style={styles.btn2} onClick={this.nilaiTugas}>Nilai Tugas</Button>
                         <Button style={styles.btn3} onClick={this.nilaiUjian}>Nilai Ujian</Button>
                         {this.onTable()}
