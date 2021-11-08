@@ -30,7 +30,7 @@ class SoalUjian extends React.Component {
     // getStudentsById
     studentByid = (fullname) => {
         let name = {
-            fullname: 'yoona shi'
+            fullname: 'Amelia Sindi Wijaya'
         }
         console.log(name)
         Axios.post(`http://localhost:2000/admin/student-fullname`, name)

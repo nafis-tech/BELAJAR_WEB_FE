@@ -84,7 +84,7 @@ class Materi extends React.Component {
                             {this.state.linkmateri.map((item, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{item.alamat_link}</td>
+                                    <td><a href={item.alamat_link}>{item.alamat_link}</a></td>
                                     <td>{item.materi}</td>
                                     {/* <td>sudah download</td> */}
                                 </tr>
