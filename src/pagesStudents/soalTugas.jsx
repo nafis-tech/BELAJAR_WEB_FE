@@ -146,7 +146,7 @@ class SoalTugas extends React.Component {
                 {this.state.soalTugas.map(item => {
                     return (
                         <div style={{ marginLeft: '10vw', width: '80vw', padding: '3vw', borderRadius: '10px', backgroundColor: 'rgba(255, 255, 255, .9)', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.12)' }}>
-                            <p><strong>{item.no_soal_tugas}.</strong> {item.soal}</p>
+                            <p><strong>{item.no_soal_tugas}.</strong> {item.soal_tugas}</p>
                             <div style={{ display: 'flex', flexDirection: 'column', width: '40vw', margin: '2vh', }}>
                                 <Button style={styles.btn}
                                     value={item.jawaban_a}
